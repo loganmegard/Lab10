@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Wildfires and Tornadoes LJM</title>
+  
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #optionsDiv {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      max-width: 450px;
+      background-color: dimgray;
+      color: white;
+      text-align: center;
+      z-index: 30;
+      padding: 10px;
+      border-radius: 5px;
+    } 
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.10/"></script>
+
+  <script>
+    require([
+      "esri/views/MapView",
+      "esri/WebMap",
+      "esri/widgets/Legend",
+	  "esri/widgets/BasemapToggle"
+    ], function(
+      MapView, WebMap, Legend, BasemapToggle
+    ) {
+      var webmap = new WebMap({
+        portalItem: { // Portal to Wildfires and Tornadoes LJM
+          id: "87a1665d599c4c52b3d191dcb227f90b"
+        }
+      });
+
+      var view = new MapView({
+        map: webmap,
+        container: "viewDiv",
+	});
+		
+		  view.when(function() {
+          var featureLayer = webmap.layers.getItemAt(0);
+
+          var legend = new Legend({
+            view: view,
+            layerInfos: [{
+              layer: featureLayer,
+              title: "NY Educational Attainment"
+            }]
+          });
+
+          view.ui.add(legend, "bottom-right");
+        });
+		
+        var toggle = new BasemapToggle({
+          view: view,
+          nextBasemap: "hybrid" 
+        });
+        view.ui.add(toggle, "top-right");
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
